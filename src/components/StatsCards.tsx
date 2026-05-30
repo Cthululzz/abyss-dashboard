@@ -15,7 +15,7 @@ const StatsCards = () => {
         {title: "New Orders", value: "345", change: "-5%", icon: ShoppingBag},
     ]);
 
-    const isPositive = (change) => change.startsWith("+");
+    const isPositive = (change: string) => change.startsWith("+");
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
