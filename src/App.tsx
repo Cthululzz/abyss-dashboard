@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar"
 import StatsCards from "./components/StatsCards"
+import Charts from "./components/Charts"
 
 const App = () => {
 
@@ -131,7 +132,8 @@ return (
         onToggleTheme={toggleTheme}
         isMobile={isMobile}/>
        <main className="flex-1 p-6">
-       <StatsCards/> 
+       <StatsCards/>
+       <Charts/>  
        </main>
 
     </div>
