@@ -4,20 +4,24 @@ import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
+  ArcElement,
   BarElement,
-  Tooltip,
+  CategoryScale,
+  Chart as ChartJS,
   Legend,
+  LinearScale,
+  Title,
+  Tooltip,
 } from "chart.js";
 
 ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
   CategoryScale,
   LinearScale,
-  BarElement,
-  Tooltip,
-  Legend
+  ArcElement
 );
 
 const Charts = () => {
@@ -25,14 +29,15 @@ const Charts = () => {
 
   const hoursActivityData = {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+
     datasets: [
       {
-        label: "Hours Active",
-        data: [2, 3, 4, 5, 6, 7, 8],
+        label: "Active Hours",
+        data: [6.5, 7.2, 8, 7.5, 6.8, 4.5, 3.2],
         backgroundColor: "#ece883",
-        borderRadius: 6,
-        barPercentage: 0.7,
-        categoryPercentage: 0.95,
+        borderRadius: 10,
+        barPercentage: 0.65,
+        categoryPercentage: 0.8,
       },
     ],
   };
@@ -47,10 +52,15 @@ const Charts = () => {
       },
 
       tooltip: {
+        backgroundColor: "#111827",
+        borderColor: "#334155",
+        borderWidth: 1,
+        cornerRadius: 8,
+        padding: 12,
+        displayColors: false,
+
         callbacks: {
-          label: function (context: any) {
-            return `${context.raw} hours`;
-          },
+          label: (context: any) => `${context.raw} hours`,
         },
       },
     },
@@ -72,7 +82,7 @@ const Charts = () => {
 
       y: {
         grid: {
-          color: "rgba(0, 0, 0, 0.5)",
+          color: "rgba(100,116,139,0.15)",
         },
 
         ticks: {
@@ -83,9 +93,7 @@ const Charts = () => {
             size: 10,
           },
 
-          callback: function (value: any) {
-            return value + "h";
-          },
+          callback: (value: any) => `${value}h`,
         },
       },
     },
@@ -100,10 +108,12 @@ const Charts = () => {
     { time: "18:00", activity: "Evening Exercise", completed: false },
   ];
 
-  const currentDate = new Date();
+    const currentDate = new Date();
+
   const currentMonth = currentDate.toLocaleString("default", {
     month: "long",
   });
+
   const currentYear = currentDate.getFullYear();
 
   const firstDayOfMonth = new Date(
@@ -119,6 +129,7 @@ const Charts = () => {
   ).getDate();
 
   const calendarDays: (number | null)[] = [];
+
   const today = currentDate.getDate();
 
   for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
@@ -137,139 +148,173 @@ const Charts = () => {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
 
       {/* Hours Activity */}
-      <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
-            Hours Activity
-          </h2>
+<div className="bg-white dark:bg-gray-800/50 p-5 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+  <div className="flex items-center justify-between mb-2">
+    <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+      Hours Activity
+    </h2>
 
-          <Clock className="w-3.5 h-3.5 text-[#ece883]" />
-        </div>
+    <Clock className="w-3.5 h-3.5 text-[#ece883]" />
+  </div>
 
-        <div className="h-48">
-          <Bar
-            key={barChartKey}
-            data={hoursActivityData}
-            options={barChartOptions}
-          />
-        </div>
+  {/* Summary */}
+  <div className="mb-5">
+    <div className="flex items-end justify-between">
+      <div>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white">
+          43.7h
+        </p>
+
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          Weekly Activity
+        </p>
       </div>
 
-      {/* Daily Schedule */}
-      <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
-            Daily Schedule
-          </h2>
+      <div className="text-right">
+        <p className="text-sm font-semibold text-green-500">
+          +12%
+        </p>
 
-          <span className="text-[10px] text-gray-500 dark:text-gray-400">
-            {currentDate.toLocaleDateString()}
-          </span>
-        </div>
-
-        <div className="space-y-1.5">
-          {scheduleItems.map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-            >
-              {item.completed ? (
-                <CheckCircle className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600 shrink-0" />
-              ) : (
-                <Circle className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600 shrink-0" />
-              )}
-
-              <div className="flex-1 min-w-0">
-                <p
-                  className={`text-xs font-medium ${
-                    item.completed
-                      ? "text-gray-400 line-through dark:text-gray-500"
-                      : "text-gray-500 dark:text-gray-400"
-                  }`}
-                >
-                  {item.activity}
-                </p>
-
-                <p className="text-[10px] text-gray-400 dark:text-gray-500">
-                  {item.time}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <p className="text-[10px] text-gray-500 dark:text-gray-400">
+          vs last week
+        </p>
       </div>
+    </div>
+  </div>
 
-      {/* Calendar */}
-      <div className="bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
-            Calendar
-          </h2>
+  {/* Chart */}
+  <div className="h-44">
+    <Bar
+      key={barChartKey}
+      data={hoursActivityData}
+      options={barChartOptions}
+    />
+  </div>
+</div>
 
-          <CalendarIcon className="w-3.5 h-3.5 text-[#ece883]" />
-        </div>
+{/* Daily Schedule */}
+<div className="bg-white dark:bg-gray-800/50 p-5 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+  <div className="flex items-center justify-between mb-2">
+    <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+      Daily Schedule
+    </h2>
 
-        <div className="text-center mb-2">
-          <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
-            {currentMonth} {currentYear}
-          </p>
-        </div>
+    <span className="text-[10px] text-gray-500 dark:text-gray-400">
+      {currentDate.toLocaleDateString()}
+    </span>
+  </div>
 
-        <div className="grid grid-cols-7 gap-0.5 mb-1">
-          {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
-            <div
-              key={index}
-              className="text-center text-[10px] font-medium text-gray-500 dark:text-gray-400 py-0.5"
-            >
-              {day}
-            </div>
-          ))}
-        </div>
+  <div className="space-y-1.5">
+    {scheduleItems.map((item, index) => (
+      <div
+        key={index}
+        className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+      >
+        {item.completed ? (
+          <CheckCircle className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600 shrink-0" />
+        ) : (
+          <Circle className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600 shrink-0" />
+        )}
 
-        <div className="grid grid-cols-7 gap-0.5">
-          {calendarDays.map((day, index) => (
-            <div
-              key={index}
-              className={`text-center py-1 text-xs rounded-md transition-colors
-                ${day === null ? "text-transparent" : "text-gray-700 dark:text-gray-300"}
-                ${
-                  day === today
-                    ? "bg-[#ece883] text-gray-900"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                }
-                ${day === today ? "shadow-md" : "shadow-sm"}
-              `}
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-
-        {/* Upcoming Events */}
-        <div className="mt-3 pt-2 border-t border-gray-100 dark:border-gray-700">
-          <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-1.5">
-            Upcoming
+        <div className="flex-1 min-w-0">
+          <p
+            className={`text-xs font-medium ${
+              item.completed
+                ? "text-gray-400 line-through dark:text-gray-500"
+                : "text-gray-500 dark:text-gray-400"
+            }`}
+          >
+            {item.activity}
           </p>
 
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5">
-              <div className="w-1 h-1 rounded-full bg-[#ece883]" />
-
-              <p className="text-[10px] text-gray-600 dark:text-gray-400">
-                Design Meeting - Tomorrow
-              </p>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <div className="w-1 h-1 rounded-full bg-[#ece883]" />
-
-              <p className="text-[10px] text-gray-600 dark:text-gray-400">
-                Project deadline - June 15
-              </p>
-            </div>
-          </div>
+          <p className="text-[10px] text-gray-400 dark:text-gray-500">
+            {item.time}
+          </p>
         </div>
       </div>
+    ))}
+  </div>
+</div>
+
+{/* Calendar */}
+<div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+  <div className="flex items-center justify-between mb-2">
+    <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+      Calendar
+    </h2>
+
+    <CalendarIcon className="w-3.5 h-3.5 text-[#ece883]" />
+  </div>
+
+  <div className="text-center mb-4">
+    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 capitalize">
+      {currentMonth} {currentYear}
+    </p>
+  </div>
+
+  <div className="grid grid-cols-7 gap-1 mb-2">
+    {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+      <div
+        key={index}
+        className="py-1 text-center text-[11px] font-semibold text-gray-400 dark:text-gray-500"
+      >
+        {day}
+      </div>
+    ))}
+  </div>
+
+  <div className="grid grid-cols-7 gap-1">
+    {calendarDays.map((day, index) => (
+      <div
+        key={index}
+        className={`
+          flex items-center justify-center
+          h-8
+          text-xs
+          rounded-lg
+          transition-all
+          ${
+            day === null
+              ? "text-transparent"
+              : "text-gray-700 dark:text-gray-300"
+          }
+          ${
+            day === today
+              ? "bg-[#ece883] text-gray-900 font-semibold shadow-md"
+              : "hover:bg-gray-100 dark:hover:bg-gray-700"
+          }
+        `}
+      >
+        {day}
+      </div>
+    ))}
+  </div>
+
+  {/* Upcoming Events */}
+  <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+    <p className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">
+      Upcoming
+    </p>
+
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <div className="w-1.5 h-1.5 rounded-full bg-[#ece883]" />
+
+        <p className="text-[10px] text-gray-600 dark:text-gray-400">
+          Design Meeting - Tomorrow
+        </p>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <div className="w-1.5 h-1.5 rounded-full bg-[#ece883]" />
+
+        <p className="text-[10px] text-gray-600 dark:text-gray-400">
+          Project Deadline - June 15
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
     </div>
   );

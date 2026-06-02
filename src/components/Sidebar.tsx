@@ -162,7 +162,7 @@ const Sidebar = ({ onCloseDrawer }: SidebarProps) => {
 
       </div>
 
-      {/* Navigation */}
+      {/* Navegación */}
       <nav className="p-4 h-[calc(100%-8rem)] overflow-y-auto">
 
         <ul className="space-y-1">
