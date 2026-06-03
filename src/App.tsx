@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar"
 import StatsCards from "./components/StatsCards"
 import Charts from "./components/Charts"
+import Tasks from "./components/Tasks"
 
 const App = () => {
 
@@ -133,7 +134,8 @@ return (
         isMobile={isMobile}/>
        <main className="flex-1 p-6">
        <StatsCards/>
-       <Charts/>  
+       <Charts/>
+       <Tasks/>
        </main>
 
     </div>
