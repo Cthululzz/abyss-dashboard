@@ -135,7 +135,7 @@ return (
        <main className="flex-1 p-6">
        <StatsCards/>
        <Charts/>
-       <Tasks/>
+       <Tasks className="mb-6"/>
        </main>
 
     </div>
