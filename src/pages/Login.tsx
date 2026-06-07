@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import logo from "./assets/logo.png";
+import logo from "../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    navigate("/dashboard");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
@@ -58,7 +65,7 @@ const Login = () => {
             <img
               src={logo}
               alt="VetCare+"
-              className="w-90 object-contain select-none"
+              className="w-[360px] object-contain select-none"
               draggable={false}
             />
           </div>
@@ -73,10 +80,7 @@ const Login = () => {
               Accede a tu plataforma veterinaria.
             </p>
 
-            <form
-              className="mt-10 space-y-6"
-              onSubmit={(e) => e.preventDefault()}
-            >
+            <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
               {/* Email */}
               <div>
                 <label
